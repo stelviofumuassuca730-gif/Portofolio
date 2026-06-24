@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stélvio · Developer & Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0C0C0C;
+      --white:   #F5F2ED;
+      --muted:   #6B6560;
+      --gold:    #C9A96E;
+      --border:  rgba(255,255,255,0.07);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 3rem;
+      mix-blend-mode: normal;
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+    .nav-logo em { color: var(--gold); font-style: normal; }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    /* ── HERO FULL SCREEN ── */
+    #hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Fundo: gradiente angular que evoca pôr-do-sol angolano */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 30%, rgba(201,169,110,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 80% at 10% 80%, rgba(150,80,40,0.08) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* Linha horizontal decorativa */
+    #hero::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 3rem; right: 3rem;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 10vw, 8rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+    .hero-title .gold { color: var(--gold); }
+    .hero-title .line2 {
+      display: block;
+      padding-left: 2.5rem;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(245,242,237,0.35);
+    }
+
+    .hero-right {
+      text-align: right;
+      max-width: 280px;
+    }
+    .hero-location {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+    .hero-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+
+    /* ── TAGLINE BAR ── */
+    .tagline-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.2rem 3rem;
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      overflow: hidden;
+    }
+    .tagline-bar span {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .tagline-bar .dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ── SECTION SHARED ── */
+    .s-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+
+    /* ── WORK GRID ── */
+    #work {
+      padding: 6rem 3rem;
+    }
+    #work .work-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+    }
+    .work-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .work-count {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* Grid estilo Squarespace: 2 colunas, alturas variadas */
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5px;
+    }
+
+    .work-item {
+      position: relative;
+      overflow: hidden;
+      background: #111;
+      aspect-ratio: 4/3;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+    }
+    /* Primeiro item ocupa largura total */
+    .work-item:first-child {
+      grid-column: 1 / -1;
+      aspect-ratio: 16/7;
+    }
+
+    /* Fundo de cada card — cor única por projeto */
+    .work-item .bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .work-item:hover .bg { transform: scale(1.04); }
+
+    .bg-1 {
+      background:
+        radial-gradient(ellipse 70% 70% at 30% 40%, rgba(201,169,110,0.2) 0%, transparent 60%),
+        linear-gradient(135deg, #1a1208 0%, #0c0c0c 100%);
+    }
+    .bg-2 {
+      background:
+        radial-gradient(ellipse 60% 60% at 70% 60%, rgba(60,100,180,0.15) 0%, transparent 60%),
+        linear-gradient(135deg, #080e1a 0%, #0c0c0c 100%);
+    }
+    .bg-3 {
+      background:
+        radial-gradient(ellipse 60% 60% at 40% 40%, rgba(80,160,100,0.12) 0%, transparent 60%),
+        linear-gradient(135deg, #080f0a 0%, #0c0c0c 100%);
+    }
+    .bg-4 {
+      background:
+        radial-gradient(ellipse 60% 60% at 60% 50%, rgba(180,60,60,0.1) 0%, transparent 60%),
+        linear-gradient(135deg, #120808 0%, #0c0c0c 100%);
+    }
+
+    /* Ícone grande no centro do card */
+    .work-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      font-size: clamp(3rem, 6vw, 5rem);
+      opacity: 0.18;
+      transition: opacity 0.4s;
+      user-select: none;
+    }
+    .work-item:hover .work-icon { opacity: 0.08; }
+
+    /* Overlay que aparece no hover */
+    .work-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2.5rem;
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .work-item:hover .work-overlay { opacity: 1; }
+
+    /* Info sempre visível no canto inf. esq. */
+    .work-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1.75rem 2rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .work-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .work-year {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    .work-detail {
+      font-size: 0.85rem;
+      color: rgba(245,242,237,0.7);
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+    }
+    .work-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--gold);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 70vh;
+      border-top: 1px solid var(--border);
+    }
+    .about-visual {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 80% at 50% 50%, rgba(201,169,110,0.08) 0%, transparent 70%),
+        #0e0d0b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .about-monogram {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(8rem, 18vw, 14rem);
+      font-weight: 700;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,169,110,0.2);
+      user-select: none;
+      line-height: 1;
+    }
+    .about-text-col {
+      padding: 5rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-left: 1px solid var(--border);
+    }
+    .about-text-col h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.75rem;
+    }
+    .about-text-col h2 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .about-p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .about-p strong { color: var(--white); font-weight: 500; }
+
+    .skills-row {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .skill-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .skill-line:last-child { border-bottom: none; padding-bottom: 0; }
+    .skill-name { font-size: 0.82rem; font-weight: 500; }
+    .skill-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; justify-content: flex-end; }
+    .stag {
+      font-size: 0.68rem;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--muted);
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      padding: 8rem 3rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #contact::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 300px;
+      background: radial-gradient(ellipse, rgba(201,169,110,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #contact .s-label { text-align: center; }
+    .contact-h {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 7vw, 5.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 2.5rem;
+    }
+    .contact-h em { font-style: italic; color: var(--gold); }
+
+    .contact-btns {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .cbtn {
+      padding: 0.9rem 2rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .cbtn-gold { background: var(--gold); color: #0C0C0C; }
+    .cbtn-gold:hover { background: #D9BA7E; transform: translateY(-2px); }
+    .cbtn-ghost { border: 1px solid var(--border); color: var(--white); }
+    .cbtn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--white); }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.up { opacity: 1; transform: none; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { padding: 0 1.5rem 3rem; }
+      #hero::after { left: 1.5rem; right: 1.5rem; }
+      .hero-content { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+      .hero-right { text-align: left; max-width: 100%; }
+      .tagline-bar { padding: 1rem 1.5rem; gap: 1.5rem; }
+      #work { padding: 4rem 1.5rem; }
+      .work-grid { grid-template-columns: 1fr; }
+      .work-item:first-child { grid-column: 1; aspect-ratio: 4/3; }
+      #about { grid-template-columns: 1fr; }
+      .about-visual { min-height: 220px; }
+      .about-text-col { padding: 3rem 1.5rem; border-left: none; border-top: 1px solid var(--border); }
+      #contact { padding: 5rem 1.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { transition: none; }
+      .work-item .bg { transition: none; }
+      .scroll-line { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">St<em>é</em>lvio</a>
+  <ul class="nav-links">
+    <li><a href="#work">Trabalho</a></li>
+    <li><a href="#about">Sobre</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+  <div class="hero-content">
+    <h1 class="hero-title">
+      <span>St<span class="gold">é</span>lvio</span>
+      <span class="line2">Builder</span>
+    </h1>
+    <div class="hero-right">
+      <div class="hero-location">Angola · Chandigarh · Global</div>
+      <p class="hero-desc">
+        Developer e constructor de produtos digitais reais — imobiliário, logística, negócios.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- TAGLINE BAR -->
+<div class="tagline-bar">
+  <span>Engenharia Informática</span>
+  <div class="dot"></div>
+  <span>Frontend Development</span>
+  <div class="dot"></div>
+  <span>Produtos Digitais</span>
+  <div class="dot"></div>
+  <span>Mercado Angolano</span>
+  <div class="dot"></div>
+  <span>Deploy no Vercel</span>
+</div>
+
+<!-- WORK -->
+<section id="work">
+  <div class="work-header reveal">
+    <div>
+      <div class="s-label">Trabalho selecionado</div>
+      <h2 class="work-title">Projetos</h2>
+    </div>
+    <span class="work-count">03 projetos</span>
+  </div>
+
+  <div class="work-grid">
+
+    <!-- Muzimóveis — item largo -->
+    <a href="https://muzimoveis.vercel.app" target="_blank" class="work-item reveal">
+      <div class="bg bg-1"></div>
+      <div class="work-icon">🏠</div>
+      <div class="work-info">
+        <span class="work-name">Muzimóveis</span>
+        <span class="work-year">2024–25</span>
+      </div>
+      <div class="work-overlay">
+        <p class="work-detail">Plataforma imobiliária para Luanda e Kilamba. Simulador de financiamento, mapa interativo e integração WhatsApp.</p>
+        <span class="work-cta">Ver projeto ↗</span>
+      </div>
+    </a>
+
+    <!-- Fumuassuca -->
+    <a href="#" class="work-item reveal">
+      <div class="bg bg-2"></div>
+      <div class="work-icon">🚢</div>
+      <div class="work-info">
+        <span class="work-name">Fumuassuca Group</span>
+        <span class="work-year">2024</span>
+      </div>
+      <div class="work-overlay">
+        <p class="work-detail">Site institucional para empresa de logística internacional — exportação da Índia para mercados globais.</p>
+        <span class="work-cta">Ver projeto ↗</span>
+      </div>
+    </a>
+
+    <!-- Portfolio -->
+    <a href="#" class="work-item reveal">
+      <div class="bg bg-3"></div>
+      <div class="work-icon">✦</div>
+      <div class="work-info">
+        <span class="work-name">Portfólio</span>
+        <span class="work-year">2025</span>
+      </div>
+      <div class="work-overlay">
+        <p class="work-detail">Este site. Design editorial dark inspirado em Squarespace, com identidade angolana e código 100% customizado.</p>
+        <span class="work-cta">Estás aqui ·</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal">
+    <div class="about-monogram">S</div>
+  </div>
+  <div class="about-text-col reveal">
+    <div class="s-label">Sobre mim</div>
+    <h2>Construo coisas que <em>existem</em> de verdade.</h2>
+    <p class="about-p">
+      Sou <strong>Stélvio</strong>, estudante de Engenharia Informática no Rayat School, Chandigarh — e enquanto estudo, construo produtos reais para mercados reais.
+    </p>
+    <p class="about-p">
+      Venho de <strong>Angola</strong> e isso molda o que faço: vejo lacunas no mercado angolano e construo soluções digitais para as preencher. Imobiliário, logística — áreas onde a tecnologia ainda tem espaço enorme.
+    </p>
+
+    <div class="skills-row">
+      <div class="skill-line">
+        <span class="skill-name">Frontend</span>
+        <div class="skill-tags">
+          <span class="stag">HTML5</span>
+          <span class="stag">CSS3</span>
+          <span class="stag">JavaScript</span>
+        </div>
+      </div>
+      <div class="skill-line">
+        <span class="skill-name">Ferramentas</span>
+        <div class="skill-tags">
+          <span class="stag">Git</span>
+          <span class="stag">Vercel</span>
+          <span class="stag">Leaflet.js</span>
+          <span class="stag">EmailJS</span>
+        </div>
+      </div>
+      <div class="skill-line">
+        <span class="skill-name">Linguagens</span>
+        <div class="skill-tags">
+          <span class="stag">C++</span>
+          <span class="stag">Python</span>
+        </div>
+      </div>
+      <div class="skill-line">
+        <span class="skill-name">Línguas</span>
+        <div class="skill-tags">
+          <span class="stag">Português</span>
+          <span class="stag">English</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="s-label reveal">Fala comigo</div>
+  <h2 class="contact-h reveal">Vamos construir<br>algo <em>real.</em></h2>
+  <div class="contact-btns reveal">
+    <a href="mailto:teu@email.com" class="cbtn cbtn-gold">✉ Email</a>
+    <a href="https://wa.me/244000000000" target="_blank" class="cbtn cbtn-ghost">💬 WhatsApp</a>
+    <a href="https://github.com/teu-username" target="_blank" class="cbtn cbtn-ghost">GitHub</a>
+    <a href="https://linkedin.com/in/teu-perfil" target="_blank" class="cbtn cbtn-ghost">LinkedIn</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 Stélvio</span>
+  <span>Feito à mão · Sem templates</span>
+  <a href="#">↑ Topo</a>
+</footer>
+
+<script>
+  // ── SCROLL REVEAL ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const ro = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (!e.isIntersecting) return;
+      // stagger dentro de grids
+      const siblings = e.target.parentElement.querySelectorAll('.reveal');
+      const idx = [...siblings].indexOf(e.target);
+      const delay = e.target.closest('.work-grid') ? idx * 100 : 0;
+      setTimeout(() => e.target.classList.add('up'), delay);
+      ro.unobserve(e.target);
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => ro.observe(el));
+</script>
+</body>
+</html>
