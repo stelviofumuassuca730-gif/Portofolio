@@ -23,37 +23,51 @@
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <div class="hero-tag">disponível para projetos · angola / remoto</div>
 
-  <div class="hero-code" id="hero-code">
-    <span class="cursor-blink" id="hero-cursor"></span>
+  <!-- Vídeo de fundo: substitui "hero.mp4" pelo nome do teu ficheiro -->
+  <div class="hero-video-wrap">
+    <video id="hero-video" src="PICTURE/videohero.mp4" autoplay muted playsinline loop></video>
+    <div class="hero-video-overlay"></div>
   </div>
 
-  <h1 class="hero-name">
-    <span class="first">Stélvio</span>
-    <span class="last">Fumuassuca</span>
-  </h1>
+  <!-- Canvas de partículas flutuantes -->
+  <canvas id="particles-canvas"></canvas>
 
-  <div class="hero-bottom">
-    <p class="hero-desc">
-      Programador e construtor de <strong>produtos digitais reais</strong> —
-      imobiliário, logística, negócios. De Luanda para o mundo, com código limpo e visão clara.
-    </p>
-    <div class="hero-stats">
-      <div>
-        <div class="stat-n">03</div>
-        <div class="stat-l">Projetos</div>
-      </div>
-      <div>
-        <div class="stat-n">2+</div>
-        <div class="stat-l">Anos a construir</div>
-      </div>
-      <div>
-        <div class="stat-n">∞</div>
-        <div class="stat-l">Ambição</div>
+  <!-- Conteúdo -->
+  <div class="hero-inner">
+    <div class="hero-tag">disponível para projetos · angola / remoto</div>
+
+    <div class="hero-code" id="hero-code">
+      <span class="cursor-blink" id="hero-cursor"></span>
+    </div>
+
+    <h1 class="hero-name">
+      <span class="first">Stélvio</span>
+      <span class="last">Fumuassuca</span>
+    </h1>
+
+    <div class="hero-bottom">
+      <p class="hero-desc">
+        Programador e construtor de <strong>produtos digitais reais</strong> —
+        imobiliário, logística, negócios. De Luanda para o mundo, com código limpo e visão clara.
+      </p>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-n">03</div>
+          <div class="stat-l">Projetos</div>
+        </div>
+        <div>
+          <div class="stat-n">2+</div>
+          <div class="stat-l">Anos a construir</div>
+        </div>
+        <div>
+          <div class="stat-n">∞</div>
+          <div class="stat-l">Ambição</div>
+        </div>
       </div>
     </div>
   </div>
+
 </section>
 
 <!-- ── BARRA ── -->
@@ -215,6 +229,111 @@
 </footer>
 
 <script>
+/* ── VÍDEO: pausa ao fim de 5s ── */
+(function () {
+  const v = document.getElementById('hero-video');
+  if (!v) return;
+  v.addEventListener('timeupdate', () => {
+    if (v.currentTime >= 5) {
+      v.pause();
+      /* fade out suave */
+      v.style.transition = 'opacity 0.8s ease';
+      v.style.opacity = '0';
+    }
+  });
+})();
+
+/* ── PARTÍCULAS FLUTUANTES ── */
+(function () {
+  const canvas = document.getElementById('particles-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const COUNT = 72;
+  const GREEN = '0,255,136';
+
+  function rand(min, max) { return Math.random() * (max - min) + min; }
+
+  function spawn() {
+    return {
+      x:    rand(0, W),
+      y:    rand(0, H),
+      r:    rand(1, 2.5),
+      vx:   rand(-0.25, 0.25),
+      vy:   rand(-0.4, -0.1),
+      alpha: rand(0.15, 0.55),
+      pulse: rand(0, Math.PI * 2),
+    };
+  }
+
+  for (let i = 0; i < COUNT; i++) particles.push(spawn());
+
+  /* Linhas entre partículas próximas */
+  function drawLines() {
+    const MAX_DIST = 120;
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < MAX_DIST) {
+          const alpha = (1 - dist / MAX_DIST) * 0.12;
+          ctx.strokeStyle = `rgba(${GREEN},${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    drawLines();
+
+    particles.forEach(p => {
+      p.pulse += 0.02;
+      const a = p.alpha * (0.7 + 0.3 * Math.sin(p.pulse));
+
+      /* ponto */
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${GREEN},${a})`;
+      ctx.fill();
+
+      /* halo suave */
+      const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+      grd.addColorStop(0, `rgba(${GREEN},${a * 0.4})`);
+      grd.addColorStop(1, `rgba(${GREEN},0)`);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
+      ctx.fillStyle = grd;
+      ctx.fill();
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      /* reaparecer em baixo quando sai pelo topo */
+      if (p.y < -10) { p.y = H + 10; p.x = rand(0, W); }
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+    });
+
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
 /* ── TYPEWRITER HERO ── */
 (function () {
   const el = document.getElementById('hero-code');
@@ -231,7 +350,7 @@
     { cls: 'c-comment', text: ' // a construir' },
   ];
 
-  let flat = []; // {char, cls}
+  let flat = [];
   tokens.forEach(t => {
     for (const ch of t.text) flat.push({ ch, cls: t.cls });
   });
@@ -270,18 +389,15 @@
     ctx.clearRect(0, 0, W, H);
     ctx.strokeStyle = 'rgba(0,255,136,0.18)';
     ctx.lineWidth = 1;
-
     const step = 40;
     for (let x = 0; x < W; x += step) {
       for (let y = 0; y < H; y += step) {
         if (Math.random() > 0.55) continue;
         ctx.beginPath();
         ctx.moveTo(x, y);
-        const dir = Math.random();
-        if (dir < 0.5) ctx.lineTo(x + step, y);
+        if (Math.random() < 0.5) ctx.lineTo(x + step, y);
         else ctx.lineTo(x, y + step);
         ctx.stroke();
-
         if (Math.random() > 0.75) {
           ctx.beginPath();
           ctx.arc(x, y, 2, 0, Math.PI * 2);
